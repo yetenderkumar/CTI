@@ -554,8 +554,8 @@ SP.functions.attachVoiceMailButton = function(conn)
             saveParamsMap['Status'] = 'completed';
             saveParamsMap['CallType'] = SP.calltype;
             saveParamsMap['Activitydate'] = dueDate;
-            saveParamsMap['Phone'] = SP.state.callNumber;
-            saveParamsMap['Description'] = 'Call log for '+SP.state.callNumber;
+            saveParamsMap['Phone'] = callerPhoneNumber;
+            saveParamsMap['Description'] = 'Call log for '+callerPhoneNumber;
 
             var result = JSON.parse(response.result);
             var objectidsubstr = result.objectId.substr(0,3);
