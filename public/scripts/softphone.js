@@ -532,6 +532,7 @@ SP.functions.attachVoiceMailButton = function(conn)
 
     function saveLog(response) {
             
+            console.log('Call Log Response=>'+JSON.stringify(response));
             console.log("saving log result, response:");
             var result = JSON.parse(response.result);
 
