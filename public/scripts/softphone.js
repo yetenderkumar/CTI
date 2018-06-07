@@ -551,7 +551,7 @@ SP.functions.attachVoiceMailButton = function(conn)
 
             saveParamsMap['Subject'] = 'Call log';
             saveParamsMap['Call on'] = timeStamp;
-            saveParamsMap['Status'] = 'completed';
+            saveParamsMap['Status'] = 'Open';
             saveParamsMap['CallType'] = SP.calltype;
             saveParamsMap['Activitydate'] = dueDate;
             saveParamsMap['Phone'] = callerPhoneNumber;
