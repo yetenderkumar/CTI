@@ -568,7 +568,7 @@ SP.functions.attachVoiceMailButton = function(conn)
                 saveParamsMap['whatId'] = result.objectId;
             }
                         
-            console.log("save params = " + saveParamsMap);
+            console.log("save params = " + JSON.stringify(saveParamsMap));
             
             sforce.interaction.runApex('CallerTasklogService', 'generateCallLog', 'logParamsMap='+JSON.stringify(saveParamsMap), saveLogcallback);
             
