@@ -368,7 +368,7 @@ SP.functions.attachVoiceMailButton = function(conn)
         // return to waiting state
         SP.functions.hideCallData();
         SP.functions.ready();
-        //sforce.interaction.getPageInfo(saveLog);
+        sforce.interaction.getPageInfo(saveLog);
     });
 
     Twilio.Device.connect(function (conn) {
