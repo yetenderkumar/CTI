@@ -544,26 +544,34 @@ SP.functions.attachVoiceMailButton = function(conn)
             var currentMonth = currentDate.getMonth()+1;
             var currentYear = currentDate.getFullYear();
             var dueDate = currentYear + '-' + currentMonth + '-' + currentDay;
-            var saveParams = 'Subject=' + SP.calltype +' Call on ' + timeStamp;
 
-            saveParams += '&Status=completed';                  
-            saveParams += '&CallType=' + SP.calltype;  //should change this to reflect actual inbound or outbound
-            saveParams += '&Activitydate=' + dueDate;
-            saveParams += '&Phone=' + SP.state.callNumber;  //we need to get this from.. somewhere      
-            saveParams += '&Description=' + "test description";   
+            //Map to hold the log data 
+            var saveParamsMap = {};
 
-            console.log("About to parse  result..");
-            
+            saveParamsMap['Subject'] = 'Call log';
+            saveParamsMap['Call on'] = timeStamp;
+            saveParamsMap['Status'] = 'completed';
+            saveParamsMap['CallType'] = SP.calltype;
+            saveParamsMap['Activitydate'] = dueDate;
+            saveParamsMap['Phone'] = SP.state.callNumber;
+            saveParamsMap['Description'] = 'Call log for '+SP.state.callNumber;
+
             var result = JSON.parse(response.result);
             var objectidsubstr = result.objectId.substr(0,3);
             // object id 00Q means a lead.. adding this to support logging on leads as well as contacts.
             if(objectidsubstr == '003' || objectidsubstr == '00Q') {
-                saveParams += '&whoId=' + result.objectId;                    
+                
+                saveParamsMap['whoId'] = result.objectId;
+
             } else {
-                saveParams += '&whatId=' + result.objectId;            
+
+                saveParamsMap['whatId'] = result.objectId;
             }
+                        
+            console.log("save params = " + saveParamsMap);
             
-            console.log("save params = " + saveParams);
-            sforce.interaction.saveLog('Task', saveParams, saveLogcallback);
-  }
+            sforce.interaction.runApex('CallerTasklogService', 'generateCallLog', 'logParamsMap='+JSON.stringify(saveParamsMap), saveLogcallback);
+            
+    }
+
 });
