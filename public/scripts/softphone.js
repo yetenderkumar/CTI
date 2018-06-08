@@ -502,6 +502,7 @@ SP.functions.attachVoiceMailButton = function(conn)
 
 
     var callerPhoneNumber ='';
+    var callerObjectId = '';
     var callStartCall = function(response) {
 
       //called onClick2dial
@@ -517,6 +518,7 @@ SP.functions.attachVoiceMailButton = function(conn)
             var result = JSON.parse(response.result); 
             callerPhoneNumber = cleanFormatting(result.number);
             var objId = result.objectId;
+            callerObjectId = objId;
             sforce.interaction.runApex('CallerIdRetrivalService', 'getCallerId', 'contactId='+objId , callStartCall);
             
     } 
@@ -558,15 +560,15 @@ SP.functions.attachVoiceMailButton = function(conn)
             saveParamsMap['Description'] = 'Call log for '+callerPhoneNumber;
 
             var result = JSON.parse(response.result);
-            var objectidsubstr = result.objectId.substr(0,3);
+            var objectidsubstr = result.objectId == undefined || result.objectId == null || result.objectId == '' ?  callerObjectId.substr(0,3) : result.objectId.substr(0,3); 
             // object id 00Q means a lead.. adding this to support logging on leads as well as contacts.
             if(objectidsubstr == '003' || objectidsubstr == '00Q') {
                 
-                saveParamsMap['whoId'] = result.objectId;
+                saveParamsMap['whoId'] = result.objectId == undefined || result.objectId == null || result.objectId == '' ?  callerObjectId : result.objectId;
 
             } else {
 
-                saveParamsMap['whatId'] = result.objectId;
+                saveParamsMap['whatId'] = result.objectId == undefined || result.objectId == null || result.objectId == '' ?  callerObjectId : result.objectId;
             }
                         
             console.log("save params = " + JSON.stringify(saveParamsMap));
